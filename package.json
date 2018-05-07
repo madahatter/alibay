@@ -1,0 +1,16 @@
+{
+  "name": "mockalibay",
+  "version": "1.0.0",
+  "description": "Don't forget to npm install",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "express": "^4.16.3",
+    "fs-extra": "^5.0.0"
+  }
+}
