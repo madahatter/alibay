@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
 
 app.post('/login', (req, res) => {
+    res.send('hi')
     let parsed = JSON.stringify(req.body)
     let username = parsed.username
     let password = parsed.password
@@ -15,8 +16,12 @@ app.post('/login', (req, res) => {
     }
 });
 
+app.get('/test', (res, req) => {
+    return
+res.send('hello')
+})
 // app.post('/registerUser', (req, res) => {
-//     let uid = req.query.uid;
+//     let uid = rcd eq.query.uid;
 //     res.send(JSON.stringify(alibay.getItemsBought(uid)));
 // });
 
