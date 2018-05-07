@@ -4,16 +4,21 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
 
-app.post('/login', (req, res) => {
-    let parsed = JSON.stringify(req.body)
-    let username = parsed.username
-    let password = parsed.password
-    let sessionID = Math.floor(Math.random() * 100000000)
-    if(username === 'john' && password === 'pwd123'){
-        alibay.sessionInfo[sessionID] = {username : username}
-        res.send(JSON.stringify({sessionID: sessionID, success: true}))
-    }
-});
+// app.post('/login', (req, res) => {
+//     res.send("hi")
+//     let parsed = JSON.stringify(req.body)
+//     let username = parsed.username
+//     let password = parsed.password
+//     let sessionID = Math.floor(Math.random() * 100000000)
+//     if(username === 'john' && password === 'pwd123'){
+//         alibay.sessionInfo[sessionID] = {username : username}
+//         res.send(JSON.stringify({sessionID: sessionID, success: true}))
+//     }
+// });
+
+app.get('/test', (req,res)=>{
+    res.send("hi")
+})
 
 // app.post('/registerUser', (req, res) => {
 //     let uid = req.query.uid;
@@ -62,4 +67,4 @@ app.post('/login', (req, res) => {
 //     let uid = req.query.uid;
 //     res.send(JSON.stringify(alibay.getItemsBought(uid)));
 // });
-app.listen(3000, () => console.log('Listening on port 3000!'))
+app.listen(4000, () => console.log('Listening on port 4000!'))
