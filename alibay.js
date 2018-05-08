@@ -1,7 +1,8 @@
 const assert = require('assert');
 
 let itemsBought = {} // map that keeps track of all the items a user has bought
-
+let itemsForSale = {}
+let listings = {}
 let sessionInfo = {}
 
 /*
@@ -99,7 +100,11 @@ Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
 function allListings() {
-    
+    return Object.keys(listings)
+}
+
+function allListingObjects() {
+  //  return allListings.map(id => )
 }
 
 /*
