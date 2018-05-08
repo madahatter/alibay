@@ -67,4 +67,4 @@ res.send('hello')
 //     let uid = req.query.uid;
 //     res.send(JSON.stringify(alibay.getItemsBought(uid)));
 // });
-app.listen(3000, () => console.log('Listening on port 3000!'))
+app.listen(4000, () => console.log('Listening on port 4000!'))
