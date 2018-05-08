@@ -3,8 +3,8 @@ const assert = require('assert');
 let itemsBought = {} // map that keeps track of all the items a user has bought
 let itemsForSale = {}
 let listings = {}
+let userMap = {}
 let sessionInfo = {}
-
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -14,6 +14,21 @@ function genUID() {
 
 function putItemsBought(userID, value) {
     itemsBought[userID] = value;
+}
+registerNewUser = (newUserID, newPassword, newName) => {
+    userMap[newUserID] = {
+        password: newPassword,
+        name: newName
+    }
+}
+
+login = (userID, password) => {
+    if(userMap[userID].password === password) {
+        let sessionID = Math.floor(Math.random() * 100000000)
+        sessionInfo[sessionID] = {userID : userID} //session id created each time they login
+    } else {
+        return false
+    }
 }
 
 function getItemsBought(userID) {
@@ -55,8 +70,21 @@ This function is incomplete. You need to complete it.
       [blurb] A blurb describing the item
     returns: The ID of the new listing
 */
-function createListing(sellerID, price, blurb) {
-    
+function createListing(title, price, sellerID, blurb, imageName) {
+    let itemID = Math.floor(Math.random()*1000000)
+    listings[itemID] = {
+        title: title,
+        price: price,
+        sellerID: sellerID,
+        blurb: blurb,
+        imageName: imageName
+    }
+    if(!itemsForSale[sellerID]) {
+        itemsForSale[sellerID] = [itemID]
+    }else {
+        itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
+    }
+    return itemID
 }
 
 /* 
@@ -84,6 +112,15 @@ function buy(buyerID, sellerID, listingID) {
     
 }
 
+
+/* 
+allItemsForSale returns the IDs of all the items beingsold by a seller
+    parameter: [sellerID] The ID of the seller
+    returns: an array of listing IDs
+*/
+function allItemsForSale(sellerID) {
+    return itemsForSale[sellerID];
+}
 
 /* 
 allItemsSold returns the IDs of all the items sold by a seller
@@ -125,6 +162,10 @@ module.exports = {
     createListing,
     getItemDescription,
     buy,
-    allItemsSold
+    allItemsSold,
+    registerNewUser,
+    login,
+    userMap,
+    listings
     // Add all the other functions that need to be exported
 }

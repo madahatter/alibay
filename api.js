@@ -5,28 +5,40 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
 
 app.post('/login', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let userID = parsed.userID //username is email address
+    let parsed = JSON.parse(req.body.toString())
+    let userID = parsed.email //username is email address
     let password = parsed.password
-    let sessionID = Math.floor(Math.random() * 100000000)
-        alibay.sessionInfo[sessionID] = {username : username} //session id created each time they login
-        res.send(JSON.stringify({sessionID: sessionID, userID: 'user123', success: true}))
+    alibay.login(userID, password)
+    res.send(alibay.userMap)
+    console.log(alibay.userMap)
     
 });
 
 app.post('/registerUser', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let newUserID = parsed.userID //username is the email address
+    let parsed = JSON.parse(req.body.toString())
+    let newUserID = parsed.email //username is the email address
     let newPassword = parsed.password
     let newName = parsed.name // persons name
+    alibay.registerNewUser(newUserID, newPassword, newName)
     res.send({success: true})
     //you should redirect to login page
+    console.log(alibay.userMap)
 });
-
+app.post('/createListings', (req, res) => {
+    let parsed = JSON.parse(req.body.toString())
+    let title = parsed.itemTitle
+    let price = parsed.itemPrice
+    let sellerID = parsed.email
+    let blurb = parsed.blurb
+    let imageName = parsed.imageName
+    //receiving object of title, price, blurb, sellerid, category, img
+    res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName)));
+    console.log(alibay.listings)
+    //you will redirect to /itemDetails
+});
 app.get('/listAllItems', (req, res) => {
-    //going to send array of all items 
     res.send(JSON.stringify([{itemid1234: {
-        name: "bob", 
+        sellerName: "bob", 
         itemTitle: "Nice TV",
         itemPrice: "100$",
         image: 'img.jpg'
@@ -61,13 +73,7 @@ app.post('/itemDetails', (req, res) => {
         image: 'img.jpg'
     }}));
 })
-app.post('/createListings', (req, res) => {
-    let parsed = (JSON.parse(req.body))
-    //receiving object of title, price, blurb, sellerid, category, img
-    let itemID = Math.floor(Math.random()*1000000)
-    res.send({itemID: itemID});
-    //you will redirect to /itemDetails
-});
+
 
 app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
