@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 app.use(bodyParser.raw({ type: '*/*' }))
 
+
+app.use(express.static('images'))
+
 app.post('/login', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let userID = parsed.email //username is email address
@@ -36,6 +39,44 @@ app.post('/createListings', (req, res) => {
     //you will redirect to /itemDetails
     //you should also store userID/email from your side
 });
+
+app.get('/listAllItems', (req, res) => {
+    res.send(JSON.stringify([{itemid1234: {
+        sellerName: "bob", 
+        itemTitle: "Nice TV",
+        itemPrice: "100$",
+        image: 'img.jpg'
+    }}]));
+});
+
+// app.get('/search', (req, res) => {
+//     console.log(req.query)
+//     let terms = req.query.terms;
+//     console.log(terms.split(','))
+//     // let searchField = parsed.searchField
+//     //var listOfIds = F_getIds()
+//     //var listOfObjs = F_GetTheWholeThing(listOfIds)
+//     //res.send(JSON.stringify(listOfObjs))
+//     //sending array of items that match criteria of search
+//     res.send(JSON.stringify([{itemid1234: {
+//         name: "bob", 
+//         itemTitle: "Nice TV",
+//         itemPrice: "100$",
+//         image: 'img.jpg'
+//     }}]));
+// });
+
+// app.get('/listAllItems', (req, res) => {
+//     //alibay.allListingObjects()
+//     console.log(alibay.allListingObjects())
+//     res.send(JSON.stringify([{itemid1234: {
+//         sellerName: "bob", 
+//         itemTitle: "Nice TV",
+//         itemPrice: "100$",
+//         image: 'img.jpg'
+//     }}]));
+// });
+
 
 app.post('/itemDetails', (req, res) => {
     let parsed = JSON.parse(req.body)
