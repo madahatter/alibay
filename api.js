@@ -56,21 +56,21 @@ app.post('/itemDetails', (req, res) => {
     res.send(JSON.stringify(alibay.getItemDetails(itemID)));
 })
 
-app.post('/search', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let keyWord = parsed.searchField
-    //var listOfIds = F_getIds()
-    //var listOfObjs = F_GetTheWholeThing(listOfIds)
-    //res.send(JSON.stringify(listOfObjs))
-    //sending array of items that match criteria of search
-    res.send(JSON.stringify(alibay.search(keyWord)));
+app.get('/search', (req, res) => {
+    let keyWords = JSON.parse(req.query.terms)
+    res.send(JSON.stringify(alibay.search(keyWords)));
+});
+
+app.get('/categories', (req, res) => {
+    let keyWords = JSON.parse(req.query.terms)
+    res.send(JSON.stringify(alibay.search(keyWords)));
 });
 
 app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
     let parsedItemID = parsed.itemID
     let parsedUserID = parsed.userID
-    //will be storing itemids in a cart for that particular userID
+    //will be storing itemids and userids in a cart for that particular userID
     res.send('successfully added to cart');
     //user will continue to /listallitems
 });

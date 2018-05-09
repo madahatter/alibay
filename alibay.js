@@ -57,16 +57,28 @@ let getItemDetails = (itemID) => {
     console.log(listings[itemID])
 }
 
-let search = (keyWord) => {
-    let allItemArray = Object.values(listings)
-    let searchResults = allItemArray.filter(obj => 
-        Object.values(obj).some(val => {
-            if(val.includes) return val.toLowerCase().includes(keyWord.toLowerCase())
-            return false;
-        })
-    );
+let search = (keyWords) => {
+    // return an array of objects that includes all of the keywords
+    var searchResults = []
+    console.log(listings)
+    Object.keys(listings).forEach((KEY,IND)=>{
+        Object.keys(listings[KEY]).forEach((key,ind)=>{
+            counter = 0
+            keyWords.forEach((keyword,kInd)=>{
+                //console.log("kInd",listings[KEY][key])
+                var temp = listings[KEY][key].toString()
+                temp = temp.toLowerCase()
+                if(temp.includes(keyword)){
+                    counter++
+                }
+            })
+            //console.log(counter)
+            if(counter === keyWords.length){
+                searchResults.push(listings[KEY])
+            }
+        })        
+    })
     return searchResults
-
 }
 
 function getItemsBought(userID) {
@@ -173,10 +185,6 @@ Once an item is sold, it will not be returned by searchForListings
     parameter: [searchTerm] The search string matching listing descriptions
     returns: an array of listing IDs
 */
-function searchForListings(searchTerm) {
-
-}
-
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
     initializeUserIfNeeded,
