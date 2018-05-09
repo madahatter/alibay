@@ -59,26 +59,14 @@ let getItemDetails = (itemID) => {
 
 let search = (keyWords) => {
     // return an array of objects that includes all of the keywords
-    var searchResults = []
-    console.log(listings)
-    Object.keys(listings).forEach((KEY,IND)=>{
-        Object.keys(listings[KEY]).forEach((key,ind)=>{
-            counter = 0
-            keyWords.forEach((keyword,kInd)=>{
-                //console.log("kInd",listings[KEY][key])
-                var temp = listings[KEY][key].toString()
-                temp = temp.toLowerCase()
-                if(temp.includes(keyword)){
-                    counter++
-                }
-            })
-            //console.log(counter)
-            if(counter === keyWords.length){
-                searchResults.push(listings[KEY])
-            }
-        })        
-    })
-    return searchResults
+    return Object.values(listings).filter(listing =>
+        keyWords.every(keyword =>
+            Object.values(listing).some(listingValue => listingValue.toString().toLowerCase().includes(keyword.toLowerCase())))
+    )
+}
+
+let categories = (category) => {
+    return Object.values(listings).filter(listing => listing.category === category);
 }
 
 function getItemsBought(userID) {
@@ -89,19 +77,6 @@ function getItemsBought(userID) {
     return ret;
 }
 
-
-/*
-initializeUserIfNeeded adds the UID to our database unless it's already there
-parameter: [uid] the UID of the user.
-returns: undefined
-*/
-function initializeUserIfNeeded(uid) {
-    var items = getItemsBought[uid];
-    if (items == null) {
-        putItemsBought(uid, []);
-    }
-}
-
 /*
 allItemsBought returns the IDs of all the items bought by a buyer
     parameter: [buyerID] The ID of the buyer
@@ -110,23 +85,6 @@ allItemsBought returns the IDs of all the items bought by a buyer
 function allItemsBought(buyerID) {
     return itemsBought[buyerID];
 }
-
-/* 
-createListing adds a new listing to our global state.
-This function is incomplete. You need to complete it.
-    parameters: 
-      [sellerID] The ID of the seller
-      [price] The price of the item
-      [blurb] A blurb describing the item
-    returns: The ID of the new listing
-*/
-
-
-/* 
-getItemDescription returns the description of a listing
-    parameter: [listingID] The ID of the listing
-    returns: An object containing the price and blurb properties.
-*/
 
 
 /* 
@@ -152,8 +110,8 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
     returns: an array of listing IDs
 */
 
-function allItemsForSale(sellerID) {
-    return itemsForSale[sellerID];
+let allItemsForSale = (sellerID) => {
+    return Object.values(listings).filter(listing => listing.sellerID === sellerID);
 }
 
 /* 
@@ -187,7 +145,7 @@ Once an item is sold, it will not be returned by searchForListings
 */
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
-    initializeUserIfNeeded,
+
     putItemsBought,
     getItemsBought,
     createListing,
@@ -198,7 +156,7 @@ module.exports = {
     login,
     userMap,
     listings,
-    allListingObjects,
+    allItemsForSale,
     search
     // Add all the other functions that need to be exported
 }
