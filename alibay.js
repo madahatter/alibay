@@ -33,7 +33,7 @@ let login = (userID, password) => {
     }
 }
 
-function createListing(title, price, sellerID, blurb, imageName, category) {
+let createListing = (title, price, sellerID, blurb, imageName, category) => {
     let itemID = Math.floor(Math.random() * 1000000)
     listings[itemID] = {
         itemID,
@@ -52,21 +52,20 @@ function createListing(title, price, sellerID, blurb, imageName, category) {
     return itemID
 }
 
-function getItemDetails(itemID) {
+let getItemDetails = (itemID) => {
     return listings[itemID]
     console.log(listings[itemID])
 }
 
 let search = (keyWord) => {
     let allItemArray = Object.values(listings)
-    let searchResults = []
-    let test = allItemArray.filter(obj => 
+    let searchResults = allItemArray.filter(obj => 
         Object.values(obj).some(val => {
             if(val.includes) return val.toLowerCase().includes(keyWord.toLowerCase())
             return false;
         })
     );
-    return test
+    return searchResults
 
 }
 
