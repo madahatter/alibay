@@ -4,6 +4,9 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
 
+
+app.use(express.static('images'))
+
 app.post('/login', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let userID = parsed.email //username is email address
@@ -45,9 +48,11 @@ app.get('/listAllItems', (req, res) => {
     }}]));
 });
 
-app.post('/search', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let searchField = parsed.searchField
+app.get('/search', (req, res) => {
+    console.log(req.query)
+    let terms = req.query.terms;
+    console.log(terms.split(','))
+    // let searchField = parsed.searchField
     //var listOfIds = F_getIds()
     //var listOfObjs = F_GetTheWholeThing(listOfIds)
     //res.send(JSON.stringify(listOfObjs))
