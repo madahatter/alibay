@@ -8,9 +8,9 @@ app.post('/login', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let userID = parsed.email //username is email address
     let password = parsed.password
-    alibay.login(userID, password)
-    res.send(alibay.userMap)
-    console.log(alibay.userMap)
+    
+    res.send(JSON.stringify(alibay.login(userID, password)))
+    //email, name, sessionid, 
     
 });
 
@@ -20,9 +20,9 @@ app.post('/registerUser', (req, res) => {
     let newPassword = parsed.password
     let newName = parsed.name // persons name
     alibay.registerNewUser(newUserID, newPassword, newName)
-    res.send({success: true})
+    res.send(JSON.stringify({success: true}))
     //you should redirect to login page
-    console.log(alibay.userMap)
+    // success false
 });
 app.post('/createListings', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
@@ -31,49 +31,40 @@ app.post('/createListings', (req, res) => {
     let sellerID = parsed.email
     let blurb = parsed.blurb
     let imageName = parsed.imageName
+    let category = parsed.category
     //receiving object of title, price, blurb, sellerid, category, img
-    res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName)));
-    console.log(alibay.listings)
+    res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName, category)));
+    // you are getting back {itemid: 12342142343}
     //you will redirect to /itemDetails
+    //you should also store userID/email from your side
 });
-app.get('/listAllItems', (req, res) => {
-    res.send(JSON.stringify([{itemid1234: {
-        sellerName: "bob", 
-        itemTitle: "Nice TV",
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}]));
-});
+// app.get('/listAllItems', (req, res) => {
+//     //alibay.allListingObjects()
+//     console.log(alibay.allListingObjects())
+//     res.send(JSON.stringify([{itemid1234: {
+//         sellerName: "bob", 
+//         itemTitle: "Nice TV",
+//         itemPrice: "100$",
+//         image: 'img.jpg'
+//     }}]));
+// });
+
+app.post('/itemDetails', (req, res) => {
+    let parsed = JSON.parse(req.body)
+    let itemID = parsed.itemID
+    // returning item title, description, price, category, sellerid, sellername
+    res.send(JSON.stringify(alibay.getItemDetails(itemID)));
+})
 
 app.post('/search', (req, res) => {
     let parsed = JSON.parse(req.body)
-    let searchField = parsed.searchField
+    let keyWord = parsed.searchField
     //var listOfIds = F_getIds()
     //var listOfObjs = F_GetTheWholeThing(listOfIds)
     //res.send(JSON.stringify(listOfObjs))
     //sending array of items that match criteria of search
-    res.send(JSON.stringify([{itemid1234: {
-        name: "bob", 
-        itemTitle: "Nice TV",
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}]));
+    res.send(JSON.stringify(alibay.search(keyWord)));
 });
-
-app.post('/itemDetails', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let parsedID = parsed.itemID
-    //function to get details about that particular item
-    // returning item title, description, price, category, sellerid, sellername
-    res.send(JSON.stringify({itemid1234: {
-        name:"bob", 
-        itemTitle:"Nice TV",
-        itemBlurb: '',
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}));
-})
-
 
 app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))

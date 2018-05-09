@@ -15,25 +15,64 @@ function genUID() {
 function putItemsBought(userID, value) {
     itemsBought[userID] = value;
 }
-registerNewUser = (newUserID, newPassword, newName) => {
+let registerNewUser = (newUserID, newPassword, newName) => {
     userMap[newUserID] = {
         password: newPassword,
         name: newName
     }
 }
 
-login = (userID, password) => {
-    if(userMap[userID].password === password) {
+let login = (userID, password) => {
+    if (userMap[userID].password === password) {
         let sessionID = Math.floor(Math.random() * 100000000)
-        sessionInfo[sessionID] = {userID : userID} //session id created each time they login
+        sessionInfo[sessionID] = { userID: userID }//session id created each time they login
+        return { name: userMap[userID].name, sessionID: sessionID, success: true }
+        console.log(sessionInfo)
     } else {
-        return false
+        return null
     }
+}
+
+function createListing(title, price, sellerID, blurb, imageName, category) {
+    let itemID = Math.floor(Math.random() * 1000000)
+    listings[itemID] = {
+        itemID,
+        title,
+        price,
+        sellerID,
+        blurb,
+        imageName,
+        category
+    }
+    if (!itemsForSale[sellerID]) {
+        itemsForSale[sellerID] = [itemID]
+    } else {
+        itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
+    }
+    return itemID
+}
+
+function getItemDetails(itemID) {
+    return listings[itemID]
+    console.log(listings[itemID])
+}
+
+let search = (keyWord) => {
+    let allItemArray = Object.values(listings)
+    let searchResults = []
+    let test = allItemArray.filter(obj => 
+        Object.values(obj).some(val => {
+            if(val.includes) return val.toLowerCase().includes(keyWord.toLowerCase())
+            return false;
+        })
+    );
+    return test
+
 }
 
 function getItemsBought(userID) {
     var ret = itemsBought[userID];
-    if(ret == undefined) {
+    if (ret == undefined) {
         return null;
     }
     return ret;
@@ -47,7 +86,7 @@ returns: undefined
 */
 function initializeUserIfNeeded(uid) {
     var items = getItemsBought[uid];
-    if(items == null) {
+    if (items == null) {
         putItemsBought(uid, []);
     }
 }
@@ -58,7 +97,7 @@ allItemsBought returns the IDs of all the items bought by a buyer
     returns: an array of listing IDs
 */
 function allItemsBought(buyerID) {
-    return itemsBought[buyerID];    
+    return itemsBought[buyerID];
 }
 
 /* 
@@ -70,31 +109,14 @@ This function is incomplete. You need to complete it.
       [blurb] A blurb describing the item
     returns: The ID of the new listing
 */
-function createListing(title, price, sellerID, blurb, imageName) {
-    let itemID = Math.floor(Math.random()*1000000)
-    listings[itemID] = {
-        title: title,
-        price: price,
-        sellerID: sellerID,
-        blurb: blurb,
-        imageName: imageName
-    }
-    if(!itemsForSale[sellerID]) {
-        itemsForSale[sellerID] = [itemID]
-    }else {
-        itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
-    }
-    return itemID
-}
+
 
 /* 
 getItemDescription returns the description of a listing
     parameter: [listingID] The ID of the listing
     returns: An object containing the price and blurb properties.
 */
-function getItemDescription(listingID) {
-    
-}
+
 
 /* 
 buy changes the global state.
@@ -109,7 +131,7 @@ The seller will see the listing in his history of items sold
     returns: undefined
 */
 function buy(buyerID, sellerID, listingID) {
-    
+
 }
 
 
@@ -118,6 +140,7 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
     parameter: [sellerID] The ID of the seller
     returns: an array of listing IDs
 */
+
 function allItemsForSale(sellerID) {
     return itemsForSale[sellerID];
 }
@@ -128,7 +151,7 @@ allItemsSold returns the IDs of all the items sold by a seller
     returns: an array of listing IDs
 */
 function allItemsSold(sellerID) {
-    
+
 }
 
 /*
@@ -141,7 +164,8 @@ function allListings() {
 }
 
 function allListingObjects() {
-  //  return allListings.map(id => )
+    console.log("VALUES", Object.values(listings))
+    return Object.values(listings)
 }
 
 /*
@@ -151,7 +175,7 @@ Once an item is sold, it will not be returned by searchForListings
     returns: an array of listing IDs
 */
 function searchForListings(searchTerm) {
-    
+
 }
 
 module.exports = {
@@ -160,12 +184,14 @@ module.exports = {
     putItemsBought,
     getItemsBought,
     createListing,
-    getItemDescription,
+    getItemDetails,
     buy,
     allItemsSold,
     registerNewUser,
     login,
     userMap,
-    listings
+    listings,
+    allListingObjects,
+    search
     // Add all the other functions that need to be exported
 }
