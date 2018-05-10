@@ -1,10 +1,11 @@
 const assert = require('assert');
+const fs = require('fs')
 
-let itemsBought = {} // map that keeps track of all the items a user has bought
-let itemsForSale = {}
-let listings = {}
-let userMap = {}
-let sessionInfo = {}
+let itemsBought = JSON.parse(fs.readFileSync('db/itemsBought.json')) // map that keeps track of all the items a user has bought
+let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
+let listings = JSON.parse(fs.readFileSync('db/listings.json'))
+let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
+let sessionInfo = JSON.parse(fs.readFileSync('db/sessionInfo.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -14,12 +15,14 @@ function genUID() {
 
 function putItemsBought(userID, value) {
     itemsBought[userID] = value;
+    fs.writeFileSync('db/itemsBougth.json', itemsBought)
 }
 let registerNewUser = (newUserID, newPassword, newName) => {
     userMap[newUserID] = {
         password: newPassword,
         name: newName
     }
+    fs.writeFileSync('db/userMap.json', userMap)
 }
 
 let login = (userID, password) => {
@@ -31,6 +34,7 @@ let login = (userID, password) => {
     } else {
         return null
     }
+    fs.writeFileSync('db/sessionInfo.json', sessionInfo)
 }
 
 let createListing = (title, price, sellerID, blurb, imageName, category) => {
@@ -50,6 +54,8 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
         itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
     }
     return itemID
+    fs.writeFileSync('db/listings.json', listings)
+    fs.writeFileSync('db/itemsForSale.json', itemsForSale)
 }
 
 let getItemDetails = (itemID) => {
@@ -75,6 +81,10 @@ function getItemsBought(userID) {
         return null;
     }
     return ret;
+}
+
+let addToCart = () => {
+
 }
 
 /*

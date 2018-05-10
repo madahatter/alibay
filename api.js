@@ -40,14 +40,14 @@ app.post('/createListings', (req, res) => {
     //you should also store userID/email from your side
 });
 
-app.get('/listAllItems', (req, res) => {
-    res.send(JSON.stringify([{itemid1234: {
-        sellerName: "bob", 
-        itemTitle: "Nice TV",
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}]));
-});
+// app.get('/listAllItems', (req, res) => {
+//     res.send(JSON.stringify([{itemid1234: {
+//         sellerName: "bob", 
+//         itemTitle: "Nice TV",
+//         itemPrice: "100$",
+//         image: 'img.jpg'
+//     }}]));
+// });
 
 // app.get('/search', (req, res) => {
 //     console.log(req.query)
@@ -78,9 +78,8 @@ app.get('/listAllItems', (req, res) => {
 // });
 
 
-app.post('/itemDetails', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let itemID = parsed.itemID
+app.get('/itemDetails', (req, res) => {
+    let itemID = req.query.itemid
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify(alibay.getItemDetails(itemID)));
 })
@@ -97,6 +96,7 @@ app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
     let parsedItemID = parsed.itemID
     let parsedUserID = parsed.userID
+    alibay.addToCart()
     //will be storing itemids and userids in a cart for that particular userID
     res.send('successfully added to cart');
     //user will continue to /listallitems
@@ -130,8 +130,8 @@ app.post('/itemsbySeller', (req, res) => {
 });
 app.post('/allItemBuyer', (req, res) => {
     let parsed = (JSON.parse(req.body))
-    let parsedUserID = parsed.email //  will be retrieving items sold by the userdID in buyermap
-    res.send(JSON.stringify(allItemsForSale(parsedUserID)));
+    let parsedUserID = parsed.email //  will be retrieving items sold by the userdID in buyermap//********* */
+
 });
 app.post('/buyItems', (req, res) => {
     let parsed = JSON.parse(req.body)
@@ -147,7 +147,7 @@ app.post('/uploadImg', (req, res) => {
     console.log(`items/${randomFileName}.${extension}`);
     fs.writeFileSync(`images/${randomFileName}.${extension}`, req.body);
     // returning item title, description, price, category, sellerid, sellername
-    res.send(JSON.stringify({success: true}));
+    res.send(JSON.stringify({success: true, imageName: `${randomFileName}.${extension}` }));
  })
 
 
