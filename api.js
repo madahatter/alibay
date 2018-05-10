@@ -3,7 +3,6 @@ const express = require('express')
 const fs = require('fs');
 const app = express()
 const bodyParser = require('body-parser')
-const fs = require('fs')
 app.use(bodyParser.raw({ type: '*/*' }))
 
 
@@ -26,7 +25,7 @@ app.post('/registerUser', (req, res) => {
     //you should redirect to login page
     // success false
 });
-app.post('/createListings', (req, res) => {
+app.post('/createListing', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let title = parsed.itemTitle
     let price = parsed.itemPrice
