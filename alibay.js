@@ -6,8 +6,6 @@ let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
 let listings = JSON.parse(fs.readFileSync('db/listings.json'))
 let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
 let cartInfo = JSON.parse(fs.readFileSync('db/cartInfo.json'))
-let sessionInfo = {}
-
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -79,7 +77,7 @@ let search = (keyWords) => {
 }
 
 let categories = (category) => {
-    return Object.values(listings).filter(listing => listing.category === category);
+    return Object.values(listings).filter(listing => listing.category.toLowerCase() === category.toLowerCase());
 }
 
 function getItemsBought(userID) {
@@ -96,7 +94,7 @@ let addToCart = (itemID, sessionID) => {
     }
     sessionInfo[sessionID].concat(itemID)
     // fs.writeFileSync('db/cartInfo.json', JSON.stringify(cartInfo))
-    return JSON.stringify({success: true, itemID: itemID})
+    return itemID;
 }
 
 /*
@@ -165,6 +163,7 @@ module.exports = {
     search,
     addItemImage,
     addToCart,
-    getCartItems
+    getCartItems,
+    categories
     // Add all the other functions that need to be exported
 }
