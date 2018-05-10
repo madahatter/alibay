@@ -1,12 +1,13 @@
-const assert = require('assert');
+const assert = require('assert')
 const fs = require('fs')
 
 let itemsBought = JSON.parse(fs.readFileSync('db/itemsBought.json')) // map that keeps track of all the items a user has bought
 let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
 let listings = JSON.parse(fs.readFileSync('db/listings.json'))
 let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
-let sessionInfo = JSON.parse(fs.readFileSync('db/sessionInfo.json'))
 let cartInfo = JSON.parse(fs.readFileSync('db/cartInfo.json'))
+let sessionInfo = {}
+
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -30,9 +31,8 @@ let registerNewUser = (newUserID, newPassword, newName) => {
 
 let login = (userID, password) => {
     if (userMap[userID].password === password) {
-        let sessionID = Math.floor(Math.random() * 100000000)
-        sessionInfo[sessionID] = { userID: userID }//session id created each time they login
-        return { name: userMap[userID].name, sessionID: sessionID, success: true }
+        // sessionInfo[sessionID] = { userID: userID }//session id created each time they login
+        return { name: userMap[userID].name, success: true }
     } else {
         return null
     }
@@ -66,6 +66,10 @@ let getItemDetails = (itemID) => {
 
 }
 
+let getCartItems = (sessionID) => {
+    return sessionInfo[sessionID]
+}
+
 let search = (keyWords) => {
     // return an array of objects that includes all of the keywords
     return Object.values(listings).filter(listing =>
@@ -86,13 +90,12 @@ function getItemsBought(userID) {
     return ret;
 }
 
-let addToCart = (itemID, userID) => {
-    let itemArray = []
-    itemArray.push(itemID)
-    cartInfo[userID] = {
-        itemIDs: itemArray
+let addToCart = (itemID, sessionID) => {
+    if (!sessionInfo[sessionID]){
+        sessionInfo[sessionID] = []
     }
-    console.log(itemArray)
+    sessionInfo[sessionID].concat(itemID)
+    // fs.writeFileSync('db/cartInfo.json', JSON.stringify(cartInfo))
     return JSON.stringify({success: true, itemID: itemID})
 }
 
@@ -161,6 +164,7 @@ module.exports = {
     allItemsForSale,
     search,
     addItemImage,
-    addToCart
+    addToCart,
+    getCartItems
     // Add all the other functions that need to be exported
 }
