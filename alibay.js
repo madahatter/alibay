@@ -6,6 +6,7 @@ let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
 let listings = JSON.parse(fs.readFileSync('db/listings.json'))
 let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
 let sessionInfo = JSON.parse(fs.readFileSync('db/sessionInfo.json'))
+let cartInfo = JSON.parse(fs.readFileSync('db/cartInfo.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -69,6 +70,7 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
 }
 
 let getItemDetails = (itemID) => {
+    console.log(listings)
     return listings[itemID]
 
 }
@@ -93,8 +95,14 @@ function getItemsBought(userID) {
     return ret;
 }
 
-let addToCart = () => {
-
+let addToCart = (parsedItemID, parsedUserID) => {
+    let itemArray = []
+    itemArray.push(parseditemID)
+    cartInfo[parsedUserID] = {
+        itemIDs: itemArray
+    }
+    console.log(cartInfo)
+    return JSON.stringify({success: true, itemID: parsedItemID})
 }
 
 /*
