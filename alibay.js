@@ -1,25 +1,30 @@
 const assert = require('assert');
+const fs = require('fs')
 
-let itemsBought = {} // map that keeps track of all the items a user has bought
-let itemsForSale = {}
-let listings = {}
-let userMap = {}
-let sessionInfo = {}
+let itemsBought = JSON.parse(fs.readFileSync('db/itemsBought.json')) // map that keeps track of all the items a user has bought
+let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
+let listings = JSON.parse(fs.readFileSync('db/listings.json'))
+let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
+let sessionInfo = JSON.parse(fs.readFileSync('db/sessionInfo.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
+
+
 function genUID() {
     return Math.floor(Math.random() * 100000000)
 }
 
 function putItemsBought(userID, value) {
     itemsBought[userID] = value;
+    fs.writeFileSync('db/itemsBougth.json', JSON.stringify(itemsBought))
 }
 let registerNewUser = (newUserID, newPassword, newName) => {
     userMap[newUserID] = {
         password: newPassword,
         name: newName
     }
+    fs.writeFileSync('db/userMap.json', JSON.stringify(userMap))
 }
 
 let login = (userID, password) => {
@@ -31,6 +36,7 @@ let login = (userID, password) => {
     } else {
         return null
     }
+    fs.writeFileSync('db/sessionInfo.json', JSON.stringify(sessionInfo))
 }
 
 let createListing = (title, price, sellerID, blurb, imageName, category) => {
@@ -49,37 +55,28 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
     } else {
         itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
     }
-    return itemID
+    fs.writeFileSync('db/listings.json', JSON.stringify(listings))
+    fs.writeFileSync('db/itemsForSale.json', JSON.stringify(itemsForSale))
+    return {itemID, success: true}
+
 }
 
 let getItemDetails = (itemID) => {
     console.log(listings)
     return listings[itemID]
-    console.log(listings[itemID])
+
 }
 
 let search = (keyWords) => {
     // return an array of objects that includes all of the keywords
-    var searchResults = []
-    console.log(listings)
-    Object.keys(listings).forEach((KEY,IND)=>{
-        Object.keys(listings[KEY]).forEach((key,ind)=>{
-            counter = 0
-            keyWords.forEach((keyword,kInd)=>{
-                //console.log("kInd",listings[KEY][key])
-                var temp = listings[KEY][key].toString()
-                temp = temp.toLowerCase()
-                if(temp.includes(keyword)){
-                    counter++
-                }
-            })
-            //console.log(counter)
-            if(counter === keyWords.length){
-                searchResults.push(listings[KEY])
-            }
-        })        
-    })
-    return searchResults
+    return Object.values(listings).filter(listing =>
+        keyWords.every(keyword =>
+            Object.values(listing).some(listingValue => listingValue.toString().toLowerCase().includes(keyword.toLowerCase())))
+    )
+}
+
+let categories = (category) => {
+    return Object.values(listings).filter(listing => listing.category === category);
 }
 
 function getItemsBought(userID) {
@@ -90,17 +87,8 @@ function getItemsBought(userID) {
     return ret;
 }
 
+let addToCart = () => {
 
-/*
-initializeUserIfNeeded adds the UID to our database unless it's already there
-parameter: [uid] the UID of the user.
-returns: undefined
-*/
-function initializeUserIfNeeded(uid) {
-    var items = getItemsBought[uid];
-    if (items == null) {
-        putItemsBought(uid, []);
-    }
 }
 
 /*
@@ -112,22 +100,12 @@ function allItemsBought(buyerID) {
     return itemsBought[buyerID];
 }
 
-/* 
-createListing adds a new listing to our global state.
-This function is incomplete. You need to complete it.
-    parameters: 
-      [sellerID] The ID of the seller
-      [price] The price of the item
-      [blurb] A blurb describing the item
-    returns: The ID of the new listing
-*/
-
-
-/* 
-getItemDescription returns the description of a listing
-    parameter: [listingID] The ID of the listing
-    returns: An object containing the price and blurb properties.
-*/
+function addItemImage(itemID, img) {
+    if(!listings[itemID]) {
+        listings[itemID].imgs = []
+    }
+    listings[itemID].imgs.push(img);
+ }
 
 
 /* 
@@ -153,8 +131,8 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
     returns: an array of listing IDs
 */
 
-function allItemsForSale(sellerID) {
-    return itemsForSale[sellerID];
+let allItemsForSale = (sellerID) => {
+    return Object.values(listings).filter(listing => listing.sellerID === sellerID);
 }
 
 /* 
@@ -188,7 +166,7 @@ Once an item is sold, it will not be returned by searchForListings
 */
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
-    initializeUserIfNeeded,
+
     putItemsBought,
     getItemsBought,
     createListing,
@@ -199,7 +177,8 @@ module.exports = {
     login,
     userMap,
     listings,
-    allListingObjects,
-    search
+    allItemsForSale,
+    search,
+    addItemImage
     // Add all the other functions that need to be exported
 }
