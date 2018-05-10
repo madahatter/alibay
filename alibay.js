@@ -40,7 +40,6 @@ let login = (userID, password) => {
         let sessionID = Math.floor(Math.random() * 100000000)
         sessionInfo[sessionID] = { userID: userID }//session id created each time they login
         return { name: userMap[userID].name, sessionID: sessionID, success: true }
-        console.log(sessionInfo)
     } else {
         return null
     }
@@ -70,7 +69,6 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
 }
 
 let getItemDetails = (itemID) => {
-    console.log(listings)
     return listings[itemID]
 
 }
@@ -95,14 +93,14 @@ function getItemsBought(userID) {
     return ret;
 }
 
-let addToCart = (parsedItemID, parsedUserID) => {
+let addToCart = (itemID, userID) => {
     let itemArray = []
-    itemArray.push(parseditemID)
-    cartInfo[parsedUserID] = {
+    itemArray.push(itemID)
+    cartInfo[userID] = {
         itemIDs: itemArray
     }
-    console.log(cartInfo)
-    return JSON.stringify({success: true, itemID: parsedItemID})
+    console.log(itemArray)
+    return JSON.stringify({success: true, itemID: itemID})
 }
 
 /*
@@ -149,35 +147,11 @@ let allItemsForSale = (sellerID) => {
     return Object.values(listings).filter(listing => listing.sellerID === sellerID);
 }
 
-/* 
-allItemsSold returns the IDs of all the items sold by a seller
-    parameter: [sellerID] The ID of the seller
-    returns: an array of listing IDs
-*/
+
 function allItemsSold(sellerID) {
 
 }
 
-/*
-allListings returns the IDs of all the listings currently on the market
-Once an item is sold, it will not be returned by allListings
-    returns: an array of listing IDs
-*/
-function allListings() {
-    return Object.keys(listings)
-}
-
-function allListingObjects() {
-    console.log("VALUES", Object.values(listings))
-    return Object.values(listings)
-}
-
-/*
-searchForListings returns the IDs of all the listings currently on the market
-Once an item is sold, it will not be returned by searchForListings
-    parameter: [searchTerm] The search string matching listing descriptions
-    returns: an array of listing IDs
-*/
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
 
@@ -193,6 +167,7 @@ module.exports = {
     listings,
     allItemsForSale,
     search,
-    addItemImage
+    addItemImage,
+    addToCart
     // Add all the other functions that need to be exported
 }
