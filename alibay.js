@@ -53,6 +53,7 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
 }
 
 let getItemDetails = (itemID) => {
+    console.log(listings)
     return listings[itemID]
     console.log(listings[itemID])
 }

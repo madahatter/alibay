@@ -49,9 +49,10 @@ app.post('/createListings', (req, res) => {
 //     }}]));
 // });
 
-app.post('/itemDetails', (req, res) => {
-    let parsed = JSON.parse(req.body)
-    let itemID = parsed.itemID
+// Simon modified this
+app.get('/itemDetails', (req, res) => {
+    let itemID = req.query.itemid
+    console.log(itemID)
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify(alibay.getItemDetails(itemID)));
 })
@@ -75,9 +76,9 @@ app.post('/addToCart', (req, res) => {
     //user will continue to /listallitems
 });
 
-app.post('/itemCart', (req, res) => {
-    let parsed = (JSON.parse(req.body))
-    let parsedUserID = parsed.userID // so I can get the list of items in the cart for that particular user
+app.get('/itemCart', (req, res) => {
+    // let parsed = (JSON.parse(req.body))
+    let userID = req.query.userID // so I can get the list of items in the cart for that particular user
     // will be sending back list of items in the cart
     res.send(JSON.stringify([{itemID1234: {
         username:"bob", 
