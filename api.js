@@ -25,14 +25,15 @@ app.post('/registerUser', (req, res) => {
     //you should redirect to login page
     // success false
 });
-app.post('/createListings', (req, res) => {
+app.post('/createListing', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
-    let title = parsed.itemTitle
+    let title = parsed.title
     let price = parsed.itemPrice
     let sellerID = parsed.email
-    let blurb = parsed.blurb
-    let imageName = parsed.imageName
+    let blurb = parsed.description
+    let imageName = parsed.img
     let category = parsed.category
+    console.log(parsed)
     //receiving object of title, price, blurb, sellerid, category, img
     res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName, category)));
     // you are getting back {itemid: 12342142343}
@@ -79,7 +80,7 @@ app.post('/createListings', (req, res) => {
 
 
 app.get('/itemDetails', (req, res) => {
-    let itemID = req.query.itemid
+    let itemID = req.query.itemID
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify(alibay.getItemDetails(itemID)));
 })
