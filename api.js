@@ -88,17 +88,16 @@ app.get('/itemDetails', (req, res) => {
 app.get('/search', (req, res) => {
     let searchTerm = req.query.terms;
     let category = req.query.category; //boolean, is it a category?
-    console.log(searchTerm, searchTerm.split(','))
     if(category === "true") return res.send(JSON.stringify(alibay.categories(searchTerm)));
     res.send(JSON.stringify(alibay.search(searchTerm.split(','))));
 });
 
 app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
-    let parsedItemID = parsed.itemID
-    let parsedUserID = parsed.email
-    res.send(alibay.addToCart(parsedItemID, parsedUserID));
-    //user will continue to /listallitems
+    let ItemID = parsed.itemId
+    let UserID = parsed.email   
+    console.log(parsed)
+    res.send(alibay.addToCart(ItemID, UserID));
 });
 
 app.get('/itemCart', (req, res) => {
