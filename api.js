@@ -1,5 +1,6 @@
 const alibay = require('./alibay')
 const express = require('express')
+const fs = require('fs');
 const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
@@ -41,33 +42,6 @@ app.post('/createListings', (req, res) => {
     //you will redirect to /itemDetails
     //you should also store userID/email from your side
 });
-<<<<<<< HEAD
-app.get('/listAllItems', (req, res) => {
-    res.send(JSON.stringify([{itemid1234: {
-        sellerName: "bob", 
-        itemTitle: "Nice TV",
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}]));
-});
-
-app.get('/search', (req, res) => {
-    console.log(req.query)
-    let terms = req.query.terms;
-    console.log(terms.split(','))
-    // let searchField = parsed.searchField
-    //var listOfIds = F_getIds()
-    //var listOfObjs = F_GetTheWholeThing(listOfIds)
-    //res.send(JSON.stringify(listOfObjs))
-    //sending array of items that match criteria of search
-    res.send(JSON.stringify([{itemid1234: {
-        name: "bob", 
-        itemTitle: "Nice TV",
-        itemPrice: "100$",
-        image: 'img.jpg'
-    }}]));
-});
-=======
 // app.get('/listAllItems', (req, res) => {
 //     //alibay.allListingObjects()
 //     console.log(alibay.allListingObjects())
@@ -78,7 +52,18 @@ app.get('/search', (req, res) => {
 //         image: 'img.jpg'
 //     }}]));
 // });
->>>>>>> 19f7424a2d8ed4cbc16580a6ecc01e041550d1fd
+
+app.post('/uploadImg', (req, res) => {
+    let extension = req.query.extension;
+    let randomFileName = Math.random().toString(36).substring(7);
+    let filePath = `images/${randomFileName}.${extension}`;
+    console.log(`items/${randomFileName}.${extension}`);
+    fs.writeFileSync(filePath, req.body);
+    // alibay.addItemImage()
+    // returning item title, description, price, category, sellerid, sellername
+    res.send(JSON.stringify({success: true, img: filePath}));
+})
+
 
 app.post('/itemDetails', (req, res) => {
     let parsed = JSON.parse(req.body)
@@ -88,7 +73,7 @@ app.post('/itemDetails', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-    let keyWords = JSON.parse(req.query.terms)
+    let keyWords = req.query.terms
     res.send(JSON.stringify(alibay.search(keyWords)));
 });
 

@@ -22,6 +22,13 @@ let registerNewUser = (newUserID, newPassword, newName) => {
     }
 }
 
+function addItemImage(itemID, img) {
+    if(!listings[itemID]) {
+        listings[itemID].imgs = []
+    }
+    listings[itemID].imgs.push(img);
+}
+
 let login = (userID, password) => {
     if (userMap[userID].password === password) {
         let sessionID = Math.floor(Math.random() * 100000000)
@@ -199,6 +206,7 @@ module.exports = {
     userMap,
     listings,
     allListingObjects,
-    search
+    search,
+    addItemImage
     // Add all the other functions that need to be exported
 }
