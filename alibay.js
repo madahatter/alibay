@@ -9,20 +9,22 @@ let sessionInfo = JSON.parse(fs.readFileSync('db/sessionInfo.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
+
+
 function genUID() {
     return Math.floor(Math.random() * 100000000)
 }
 
 function putItemsBought(userID, value) {
     itemsBought[userID] = value;
-    fs.writeFileSync('db/itemsBougth.json', itemsBought)
+    fs.writeFileSync('db/itemsBougth.json', JSON.stringify(itemsBought))
 }
 let registerNewUser = (newUserID, newPassword, newName) => {
     userMap[newUserID] = {
         password: newPassword,
         name: newName
     }
-    fs.writeFileSync('db/userMap.json', userMap)
+    fs.writeFileSync('db/userMap.json', JSON.stringify(userMap))
 }
 
 let login = (userID, password) => {
@@ -34,7 +36,7 @@ let login = (userID, password) => {
     } else {
         return null
     }
-    fs.writeFileSync('db/sessionInfo.json', sessionInfo)
+    fs.writeFileSync('db/sessionInfo.json', JSON.stringify(sessionInfo))
 }
 
 let createListing = (title, price, sellerID, blurb, imageName, category) => {
@@ -54,8 +56,8 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
         itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
     }
     return itemID
-    fs.writeFileSync('db/listings.json', listings)
-    fs.writeFileSync('db/itemsForSale.json', itemsForSale)
+    fs.writeFileSync('db/listings.json', JSON.stringify(listings))
+    fs.writeFileSync('db/itemsForSale.json', JSON.stringify(itemsForSale))
 }
 
 let getItemDetails = (itemID) => {
@@ -95,6 +97,13 @@ allItemsBought returns the IDs of all the items bought by a buyer
 function allItemsBought(buyerID) {
     return itemsBought[buyerID];
 }
+
+function addItemImage(itemID, img) {
+    if(!listings[itemID]) {
+        listings[itemID].imgs = []
+    }
+    listings[itemID].imgs.push(img);
+ }
 
 
 /* 
@@ -167,6 +176,7 @@ module.exports = {
     userMap,
     listings,
     allItemsForSale,
-    search
+    search,
+    addItemImage
     // Add all the other functions that need to be exported
 }
