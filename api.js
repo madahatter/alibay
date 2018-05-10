@@ -96,10 +96,8 @@ app.get('/search', (req, res) => {
 app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
     let parsedItemID = parsed.itemID
-    let parsedUserID = parsed.userID
-    alibay.addToCart()
-    //will be storing itemids and userids in a cart for that particular userID
-    res.send('successfully added to cart');
+    let parsedUserID = parsed.email
+    res.send(alibay.addToCart(parsedItemID, parsedUserID));
     //user will continue to /listallitems
 });
 
@@ -107,6 +105,7 @@ app.get('/itemCart', (req, res) => {
     // let parsed = (JSON.parse(req.body))
     let userID = req.query.userID // so I can get the list of items in the cart for that particular user
     // will be sending back list of items in the cart
+
     res.send(JSON.stringify([{itemID1234: {
         username:"bob", 
         itemTitle:"Nice TV",
