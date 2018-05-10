@@ -62,14 +62,15 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
     } else {
         itemsForSale[sellerID] = itemsForSale[sellerID].concat(itemID)
     }
-    return itemID
     fs.writeFileSync('db/listings.json', JSON.stringify(listings))
     fs.writeFileSync('db/itemsForSale.json', JSON.stringify(itemsForSale))
+    return {itemID, success: true}
+
 }
 
 let getItemDetails = (itemID) => {
     return listings[itemID]
-    console.log(listings[itemID])
+
 }
 
 let search = (keyWords) => {
