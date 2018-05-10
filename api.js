@@ -3,18 +3,22 @@ const express = require('express')
 const fs = require('fs');
 const app = express()
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 app.use(bodyParser.raw({ type: '*/*' }))
+app.use(cookieParser())
 
+let sessionInfo = {}
 
 app.use(express.static('images'))
 
 app.get('/session', (req, res) => {
-    let sessionID = req.headers.cookie
+    let sessionID = req.cookies.session
     if (!sessionInfo[sessionID]) {
         sessionID = Math.floor(Math.random() * 100000000)
+        sessionInfo[sessionID] = [];
         res.cookie('session', sessionID, { expires: new Date(Date.now() + (1000 * 60 * 60 * 24)) });
     }
-    res.send(JSON.stringify({ success: true, sessionID }))
+    res.send(JSON.stringify({ success: true, sessionID, cartItems: sessionInfo[sessionID] }))
 })
 
 app.post('/login', (req, res) => {
@@ -102,12 +106,13 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/addToCart', (req, res) => {
-    let sessionID = req.cookie.session
+    let sessionID = req.cookies.session
     let parsed = (JSON.parse(req.body))
-    let ItemID = parsed.itemID
+    let itemID = parsed.itemID
+    sessionInfo[sessionID] = sessionInfo[sessionID].concat(itemID);
     // let UserID = parsed.email
     // console.log(parsed)
-    res.send(alibay.addToCart(ItemID, sessionID));
+    res.send({itemID, sessionID});
 });
 
 app.get('/itemCart', (req, res) => {
