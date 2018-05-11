@@ -145,7 +145,10 @@ The seller will see the listing in his history of items sold
     returns: undefined
 */
 function buy(buyerID, boughtItems) {
-    itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)
+    if(!itemsBought[buyerID]){
+        itemsBought[buyerID] = boughtItems
+    } else {
+    itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)}
     fs.writeFileSync('db/itemsBought.json', JSON.stringify(itemsBought))
     return {success: true}
 }
