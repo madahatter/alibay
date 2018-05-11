@@ -47,50 +47,8 @@ app.post('/createListing', (req, res) => {
     let imageName = parsed.img
     let category = parsed.category
     console.log(parsed)
-    //receiving object of title, price, blurb, sellerid, category, img
     res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName, category)));
-    // you are getting back {itemid: 12342142343}
-    //you will redirect to /itemDetails
-    //you should also store userID/email from your side
 });
-
-// app.get('/listAllItems', (req, res) => {
-//     res.send(JSON.stringify([{itemid1234: {
-//         sellerName: "bob", 
-//         itemTitle: "Nice TV",
-//         itemPrice: "100$",
-//         image: 'img.jpg'
-//     }}]));
-// });
-
-// app.get('/search', (req, res) => {
-//     console.log(req.query)
-//     let terms = req.query.terms;
-//     console.log(terms.split(','))
-//     // let searchField = parsed.searchField
-//     //var listOfIds = F_getIds()
-//     //var listOfObjs = F_GetTheWholeThing(listOfIds)
-//     //res.send(JSON.stringify(listOfObjs))
-//     //sending array of items that match criteria of search
-//     res.send(JSON.stringify([{itemid1234: {
-//         name: "bob", 
-//         itemTitle: "Nice TV",
-//         itemPrice: "100$",
-//         image: 'img.jpg'
-//     }}]));
-// });
-
-// app.get('/listAllItems', (req, res) => {
-//     //alibay.allListingObjects()
-//     console.log(alibay.allListingObjects())
-//     res.send(JSON.stringify([{itemid1234: {
-//         sellerName: "bob", 
-//         itemTitle: "Nice TV",
-//         itemPrice: "100$",
-//         image: 'img.jpg'
-//     }}]));
-// });
-
 
 app.get('/itemDetails', (req, res) => {
     let itemID = req.query.itemID
@@ -116,11 +74,10 @@ app.post('/addToCart', (req, res) => {
 });
 
 app.get('/itemCart', (req, res) => {
-    // let parsed = (JSON.parse(req.body))
-    let sessionID = req.headers.cookie // so I can get the list of items in the cart for that particular user
-    // will be sending back list of items in the cart
+    let sessionID = req.cookies.session
+    
+    res.send(JSON.stringify());
 
-    res.send(JSON.stringify(alibay.getCartItems(sessionID)));
 });
 
 app.post('/removeFromCart', (req, res) => {
