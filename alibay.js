@@ -150,8 +150,8 @@ The seller will see the listing in his history of items sold
      [listingID] The ID of listing
     returns: undefined
 */
-function buy(buyerID, sellerID, listingID) {
-
+function buy(buyerID, boughtItems) {
+    itemsBought[buyerID] = boughtItems
 }
 
 
@@ -183,6 +183,7 @@ module.exports = {
     addToCart,
     getCart,
     categories,
-    getRandomListings
+    getRandomListings,
+    buy
     // Add all the other functions that need to be exported
 }
