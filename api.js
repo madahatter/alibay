@@ -25,7 +25,6 @@ app.post('/login', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let userID = parsed.email //username is email address
     let password = parsed.password
-
     res.send(JSON.stringify(alibay.login(userID, password)))
 });
 app.post('/registerUser', (req, res) => {
@@ -35,8 +34,6 @@ app.post('/registerUser', (req, res) => {
     let newName = parsed.name // persons name
     alibay.registerNewUser(newUserID, newPassword, newName)
     res.send(JSON.stringify({ success: true }))
-    //you should redirect to login page
-    // success false
 });
 app.post('/createListing', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
@@ -49,42 +46,33 @@ app.post('/createListing', (req, res) => {
     console.log(parsed)
     res.send(JSON.stringify(alibay.createListing(title, price, sellerID, blurb, imageName, category)));
 });
-
 app.get('/itemDetails', (req, res) => {
     let itemID = req.query.itemID
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify(alibay.getItemDetails(itemID)));
 })
-
 app.get('/search', (req, res) => {
     let searchTerm = req.query.terms;
     let category = req.query.category; //boolean, is it a category?
     if (category === "true") return res.send(JSON.stringify(alibay.categories(searchTerm)));
     res.send(JSON.stringify(alibay.search(searchTerm.split(','))));
 });
-
 app.post('/addToCart', (req, res) => {
     let sessionID = req.cookies.session
     let parsed = (JSON.parse(req.body))
     let itemID = parsed.itemID
     sessionInfo[sessionID] = sessionInfo[sessionID].concat(itemID);
-
-    // let UserID = parsed.email
-    // console.log(parsed)
     res.send({itemID, sessionID});
 });
-
 app.get('/itemCart', (req, res) => {
     let sessionID = req.cookies.session
     let cartItems = sessionInfo[sessionID]
     res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
-
 app.post('/removeFromCart', (req, res) => {
     sessionInfo[sessionID] = sessionInfo[sessionID].filter(e => e !== itemID)
     res.send({});
 });
-
 app.get('/itemsbySeller', (req, res) => {
     let sellerID = req.query.sellerID
     console.log(sellerID)
@@ -95,14 +83,15 @@ app.post('/allItemBuyer', (req, res) => {
     let parsedUserID = parsed.email //  will be retrieving items sold by the userdID in buyermap//********* */
 
 });
-app.post('/buyItems', (req, res) => {
+app.post('/save-stripe-token', (req, res) => {
+    let sessionID = req.cookies.session
+    sessionInfo[sessionID] = []
     let parsed = JSON.parse(req.body)
-    let parsedItems = parsed.itemid //array of itemids being purchased
-    let parsedUsedID = parsed.userID// so I can associate the purchase with the buyer
-    res.send('purchase successful');
+    let boughtItems = parsed.itemID //array of itemids being purchased
+    let buyerID = parsed.email// so I can associate the purchase with the buyer
+    res.send(JSON.stringify(alibay.buy()));
     //thanks to client for purchase
 });
-
 app.post('/uploadImg', (req, res) => {
     let extension = req.query.extension;
     let randomFileName = Math.random().toString(36).substring(7);
@@ -111,7 +100,8 @@ app.post('/uploadImg', (req, res) => {
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify({ success: true, imageName: `${randomFileName}.${extension}` }));
 })
-
-
+app.get('/randomListings', (req, res) => {
+    res.send(JSON.stringify(alibay.getRandomListings()))
+})
 
 app.listen(4000, () => console.log('Listening on port 4000!'))
