@@ -11,7 +11,7 @@ let sessionInfo = {}
 
 app.use(express.static('images'))
 
-app.get('/session', (req, res) => {
+app.get('/session', (req, res) => { 
     let sessionID = req.cookies.session
     if (!sessionInfo[sessionID]) {
         sessionID = Math.floor(Math.random() * 100000000)
@@ -77,9 +77,8 @@ app.post('/addToCart', (req, res) => {
 app.get('/itemCart', (req, res) => {
     //you are passing me the sessionID so I can get the itemIDs that I am storing in my cart
     //I will be returning an array of objects that are all the objects in your cart
-    let sessionID = req.query.sessionID
+    let sessionID = req.cookies.session
     let cartItems = sessionInfo[sessionID]
-    console.log(sessionInfo)
     res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 

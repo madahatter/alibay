@@ -76,21 +76,12 @@ let addToCart = (itemID, sessionID) => {
 }
 
 let getCart = (cartItems) => {
-    let cartArray = []
-    cartItems.map(i=> cartArray.push(listings[i]))
-    console.log(listings[i])
+    return cartItems.map(itemID => listings[itemID])
 }
 
 let getItemDetails = (itemID) => {
     return listings[itemID]
 
-}
-
-
-
-
-let getCartItems = (sessionID) => {
-    return sessionInfo[sessionID]
 }
 
 let search = (keyWords) => {
@@ -113,7 +104,6 @@ function getItemsBought(userID) {
     return ret;
 }
 
-
 /*
 allItemsBought returns the IDs of all the items bought by a buyer
     parameter: [buyerID] The ID of the buyer
@@ -129,7 +119,6 @@ function addItemImage(itemID, img) {
     }
     listings[itemID].imgs.push(img);
  }
-
 
 /* 
 buy changes the global state.
