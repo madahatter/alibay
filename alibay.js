@@ -144,7 +144,7 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
 */
 
 let allItemsForSale = (sellerID) => {
-    return Object.values(listings).filter(listing => listing.sellerID === sellerID);
+    return Object.values(itemsForSale).filter(listing => listing.sellerID === sellerID);
 }
 
 module.exports = {
