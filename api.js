@@ -67,15 +67,18 @@ app.post('/addToCart', (req, res) => {
 app.get('/itemCart', (req, res) => {
     let sessionID = req.cookies.session
     let cartItems = sessionInfo[sessionID]
-    res.send(JSON.stringify(alibay.getCart(cartItems)))
+    //console.log(sessionID)
+    res.send(JSON.stringify(cartItems))
 });
 app.post('/removeFromCart', (req, res) => {
-    sessionInfo[sessionID] = sessionInfo[sessionID].filter(e => e !== itemID)
-    res.send({});
+    let sessionID = req.cookies.session
+    let parsed = JSON.parse(req.body.toString())
+    let removeItemID = parsed.itemID
+    sessionInfo[sessionID] = sessionInfo[sessionID].filter(itemArr => itemArr !== removeItemID)
+    res.send(sessionInfo[sessionID]);
 });
 app.get('/itemsbySeller', (req, res) => {
     let sellerID = req.query.sellerID
-    console.log(sellerID)
     res.send(JSON.stringify(alibay.allItemsForSale(sellerID)));
 });
 app.post('/allItemBuyer', (req, res) => {
@@ -87,9 +90,9 @@ app.post('/save-stripe-token', (req, res) => {
     let sessionID = req.cookies.session
     sessionInfo[sessionID] = []
     let parsed = JSON.parse(req.body)
-    let boughtItems = parsed.itemID //array of itemids being purchased
+    let boughtItems = parsed.cartItems //array of itemids being purchased
     let buyerID = parsed.email// so I can associate the purchase with the buyer
-    res.send(JSON.stringify(alibay.buy()));
+    res.send(JSON.stringify(alibay.buy(buyerID, boughtItems)));
     //thanks to client for purchase
 });
 app.post('/uploadImg', (req, res) => {
