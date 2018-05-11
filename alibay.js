@@ -5,7 +5,6 @@ let itemsBought = JSON.parse(fs.readFileSync('db/itemsBought.json')) // map that
 let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
 let listings = JSON.parse(fs.readFileSync('db/listings.json'))
 let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
-let cartInfo = JSON.parse(fs.readFileSync('db/cartInfo.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -71,12 +70,7 @@ let addToCart = (itemID, sessionID) => {
         sessionInfo[sessionID] = []
     }
     sessionInfo[sessionID].concat(itemID)
-    // fs.writeFileSync('db/cartInfo.json', JSON.stringify(cartInfo))
     return itemID;
-}
-
-let getCart = (cartItems) => {
-    return cartItems.map(itemID => listings[itemID])
 }
 
 let getItemDetails = (itemID) => {
@@ -151,7 +145,9 @@ The seller will see the listing in his history of items sold
     returns: undefined
 */
 function buy(buyerID, boughtItems) {
-    itemsBought[buyerID] = boughtItems
+    itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)
+    fs.writeFileSync('db/itemsBought.json', JSON.stringify(itemsBought))
+    return {success: true}
 }
 
 
@@ -181,9 +177,8 @@ module.exports = {
     search,
     addItemImage,
     addToCart,
-    getCart,
     categories,
     getRandomListings,
-    buy
+    buy,
     // Add all the other functions that need to be exported
 }
