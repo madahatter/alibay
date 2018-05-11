@@ -66,10 +66,28 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
 
 }
 
+let addToCart = (itemID, sessionID) => {
+    if (!sessionInfo[sessionID]){
+        sessionInfo[sessionID] = []
+    }
+    sessionInfo[sessionID].concat(itemID)
+    // fs.writeFileSync('db/cartInfo.json', JSON.stringify(cartInfo))
+    return itemID;
+}
+
+let getCart = (cartItems) => {
+    let cartArray = []
+    cartItems.map(i=> cartArray.push(listings[i]))
+    console.log(listings[i])
+}
+
 let getItemDetails = (itemID) => {
     return listings[itemID]
 
 }
+
+
+
 
 let getCartItems = (sessionID) => {
     return sessionInfo[sessionID]
@@ -95,14 +113,6 @@ function getItemsBought(userID) {
     return ret;
 }
 
-let addToCart = (itemID, sessionID) => {
-    if (!sessionInfo[sessionID]){
-        sessionInfo[sessionID] = []
-    }
-    sessionInfo[sessionID].concat(itemID)
-    // fs.writeFileSync('db/cartInfo.json', JSON.stringify(cartInfo))
-    return itemID;
-}
 
 /*
 allItemsBought returns the IDs of all the items bought by a buyer

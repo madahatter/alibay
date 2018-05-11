@@ -74,18 +74,20 @@ app.post('/addToCart', (req, res) => {
 });
 
 app.get('/itemCart', (req, res) => {
-    let sessionID = req.cookies.session
-    
-    res.send(JSON.stringify());
-
+    //you are passing me the sessionID so I can get the itemIDs that I am storing in my cart
+    //I will be returning an array of objects that are all the objects in your cart
+    let sessionID = req.query.sessionID
+    let cartItems = sessionInfo[sessionID]
+    res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 
 app.post('/removeFromCart', (req, res) => {
-    let parsed = (JSON.parse(req.body))
-    let parsedUserID = parsed.userID
-    let parsedItemID = parsed.itemID
+    // let parsed = (JSON.parse(req.body))
+    // let parsedUserID = parsed.userID
+    // let parsedItemID = parsed.itemID
     //will be storing itemids in a cart for that particular userID less the removed item
-    res.send('successfully removed from cart');
+    sessionInfo[sessionID] = sessionInfo[sessionID].filter(e => e !== itemID)
+    res.send({});
 });
 
 app.post('/itemsbySeller', (req, res) => {
@@ -114,6 +116,7 @@ app.post('/uploadImg', (req, res) => {
     // returning item title, description, price, category, sellerid, sellername
     res.send(JSON.stringify({ success: true, imageName: `${randomFileName}.${extension}` }));
 })
+
 
 
 app.listen(4000, () => console.log('Listening on port 4000!'))
