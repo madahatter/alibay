@@ -147,11 +147,6 @@ let allItemsForSale = (sellerID) => {
     return Object.values(listings).filter(listing => listing.sellerID === sellerID);
 }
 
-
-function allItemsSold(sellerID) {
-
-}
-
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
 
@@ -160,7 +155,6 @@ module.exports = {
     createListing,
     getItemDetails,
     buy,
-    allItemsSold,
     registerNewUser,
     login,
     userMap,

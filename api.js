@@ -75,25 +75,18 @@ app.post('/addToCart', (req, res) => {
 });
 
 app.get('/itemCart', (req, res) => {
-    //you are passing me the sessionID so I can get the itemIDs that I am storing in my cart
-    //I will be returning an array of objects that are all the objects in your cart
     let sessionID = req.cookies.session
     let cartItems = sessionInfo[sessionID]
     res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 
 app.post('/removeFromCart', (req, res) => {
-    // let parsed = (JSON.parse(req.body))
-    // let parsedUserID = parsed.userID
-    // let parsedItemID = parsed.itemID
-    //will be storing itemids in a cart for that particular userID less the removed item
     sessionInfo[sessionID] = sessionInfo[sessionID].filter(e => e !== itemID)
     res.send({});
 });
 
 app.post('/itemsbySeller', (req, res) => {
-    let parsed = (JSON.parse(req.body))
-    let parsedUserID = parsed.email //  will be retrieving items sold by the userdID in sellermap
+    let sellerID = req.query.sellerID
     res.send(JSON.stringify(alibay.allItemsForSale(parsedUserID)));
 });
 app.post('/allItemBuyer', (req, res) => {
