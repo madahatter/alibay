@@ -28,7 +28,7 @@ let registerNewUser = (newUserID, newPassword, newName) => {
 }
 
 function addItemImage(itemID, img) {
-    if(!listings[itemID]) {
+    if (!listings[itemID]) {
         listings[itemID].imgs = []
     }
     listings[itemID].imgs.push(img);
@@ -62,12 +62,12 @@ let createListing = (title, price, sellerID, blurb, imageName, category) => {
     }
     fs.writeFileSync('db/listings.json', JSON.stringify(listings))
     fs.writeFileSync('db/itemsForSale.json', JSON.stringify(itemsForSale))
-    return {itemID, success: true}
+    return { itemID, success: true }
 
 }
 
 let addToCart = (itemID, sessionID) => {
-    if (!sessionInfo[sessionID]){
+    if (!sessionInfo[sessionID]) {
         sessionInfo[sessionID] = []
     }
     sessionInfo[sessionID].concat(itemID)
@@ -114,11 +114,29 @@ function allItemsBought(buyerID) {
 }
 
 function addItemImage(itemID, img) {
-    if(!listings[itemID]) {
+    if (!listings[itemID]) {
         listings[itemID].imgs = []
     }
     listings[itemID].imgs.push(img);
- }
+}
+
+let getRandomListings = () => {
+    let listingItems = Object.values(listings)
+    if(listingItems.length <= 4) {
+        return Object.values(listings)
+    }
+    let randMap = {}
+    let randArray = []
+    let rand
+    for (var i = 0; i < 4; i++) {
+        do {
+            rand = Math.floor(Math.random() * listingItems.length)
+        } while (randMap[rand])
+        randMap[rand] = true
+        randArray.push(listingItems[rand])
+    }
+return randArray
+}
 
 /* 
 buy changes the global state.
@@ -144,7 +162,7 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
 */
 
 let allItemsForSale = (sellerID) => {
-    return itemsForSale[sellerID].map(itemID=> listings[itemID])
+    return itemsForSale[sellerID].map(itemID => listings[itemID])
 }
 
 module.exports = {
@@ -164,6 +182,7 @@ module.exports = {
     addItemImage,
     addToCart,
     getCart,
-    categories
+    categories,
+    getRandomListings
     // Add all the other functions that need to be exported
 }

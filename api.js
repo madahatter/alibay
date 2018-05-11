@@ -112,6 +112,8 @@ app.post('/uploadImg', (req, res) => {
     res.send(JSON.stringify({ success: true, imageName: `${randomFileName}.${extension}` }));
 })
 
-
+app.get('/randomListings', (req, res) => {
+    res.send(JSON.stringify(alibay.getRandomListings()))
+})
 
 app.listen(4000, () => console.log('Listening on port 4000!'))
