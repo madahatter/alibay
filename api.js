@@ -87,7 +87,7 @@ app.post('/removeFromCart', (req, res) => {
 
 app.post('/itemsbySeller', (req, res) => {
     let sellerID = req.query.sellerID
-    res.send(JSON.stringify(alibay.allItemsForSale(parsedUserID)));
+    res.send(JSON.stringify(alibay.allItemsForSale(sellerID)));
 });
 app.post('/allItemBuyer', (req, res) => {
     let parsed = (JSON.parse(req.body))
