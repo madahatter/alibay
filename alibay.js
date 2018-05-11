@@ -180,7 +180,7 @@ module.exports = {
     search,
     addItemImage,
     addToCart,
-    getCartItems,
+    getCart,
     categories
     // Add all the other functions that need to be exported
 }

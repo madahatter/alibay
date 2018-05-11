@@ -68,6 +68,7 @@ app.post('/addToCart', (req, res) => {
     let parsed = (JSON.parse(req.body))
     let itemID = parsed.itemID
     sessionInfo[sessionID] = sessionInfo[sessionID].concat(itemID);
+
     // let UserID = parsed.email
     // console.log(parsed)
     res.send({itemID, sessionID});
@@ -78,6 +79,7 @@ app.get('/itemCart', (req, res) => {
     //I will be returning an array of objects that are all the objects in your cart
     let sessionID = req.query.sessionID
     let cartItems = sessionInfo[sessionID]
+    console.log(sessionInfo)
     res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 
