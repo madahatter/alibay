@@ -13,19 +13,28 @@ app.use(express.static('images'))
 
 app.get('/session', (req, res) => { 
     let sessionID = req.cookies.session
+    console.log(sessionInfo[sessionID])
     if (!sessionInfo[sessionID]) {
         sessionID = Math.floor(Math.random() * 100000000)
-        sessionInfo[sessionID] = [];
+        sessionInfo[sessionID] = {cartItems: [], name: '', email: '' };
         res.cookie('session', sessionID, { expires: new Date(Date.now() + (1000 * 60 * 60 * 24)) });
     }
-    res.send(JSON.stringify({ success: true, sessionID, cartItems: sessionInfo[sessionID] }))
+    // res.send(JSON.stringify({ success: true, sessionID, name: sessionInfo[sessionID].name, email: sessionInfo[sessionID].email, cartItems: sessionInfo[sessionID].cartItems }))
+    res.send(JSON.stringify({ success: true, sessionID, ...sessionInfo[sessionID] }))
 })
 
 app.post('/login', (req, res) => {
+    let sessionID = req.cookies.session;
+    console.log(sessionID, sessionInfo[sessionID])
     let parsed = JSON.parse(req.body.toString())
     let userID = parsed.email //username is email address
     let password = parsed.password
-    res.send(JSON.stringify(alibay.login(userID, password)))
+    let name = alibay.login(userID, password);
+    if(!name) return res.send(JSON.stringify({success: false}));
+    sessionInfo[sessionID].name = name;
+    sessionInfo[sessionID].email = userID;
+    console.log(sessionInfo[sessionID])
+    res.send(JSON.stringify({success: true, name}))
 });
 app.post('/registerUser', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
@@ -61,16 +70,16 @@ app.post('/addToCart', (req, res) => {
     let sessionID = req.cookies.session
     let parsed = (JSON.parse(req.body))
     let itemID = parsed.itemID
-    sessionInfo[sessionID] = sessionInfo[sessionID].concat(itemID);
+    sessionInfo[sessionID].cartItems = sessionInfo[sessionID].cartItems.concat(itemID);
     res.send({itemID, sessionID});
 });
 app.get('/itemCart', (req, res) => {
     let sessionID = req.cookies.session
-    let cartItems = sessionInfo[sessionID]
+    let cartItems = sessionInfo[sessionID].cartItems
     res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 app.post('/removeFromCart', (req, res) => {
-    sessionInfo[sessionID] = sessionInfo[sessionID].filter(e => e !== itemID)
+    sessionInfo[sessionID].cartItems = sessionInfo[sessionID].cartItems.filter(e => e !== itemID)
     res.send({});
 });
 app.get('/itemsbySeller', (req, res) => {
@@ -85,7 +94,7 @@ app.post('/allItemBuyer', (req, res) => {
 });
 app.post('/save-stripe-token', (req, res) => {
     let sessionID = req.cookies.session
-    sessionInfo[sessionID] = []
+    sessionInfo[sessionID].cartItems = []
     let parsed = JSON.parse(req.body)
     let boughtItems = parsed.itemID //array of itemids being purchased
     let buyerID = parsed.email// so I can associate the purchase with the buyer

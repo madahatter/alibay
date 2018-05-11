@@ -37,7 +37,7 @@ function addItemImage(itemID, img) {
 let login = (userID, password) => {
     if (userMap[userID].password === password) {
         // sessionInfo[sessionID] = { userID: userID }//session id created each time they login
-        return { name: userMap[userID].name, success: true }
+        return userMap[userID].name
     } else {
         return null
     }
