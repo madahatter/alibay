@@ -108,7 +108,7 @@ allItemsBought returns the IDs of all the items bought by a buyer
     returns: an array of listing IDs
 */
 function allItemsBought(buyerID) {
-    return itemBought[buyerID].map(itemID => listings[itemID])
+    return itemsBought[buyerID].map(itemID => listings[itemID])
 }
 
 function addItemImage(itemID, img) {
