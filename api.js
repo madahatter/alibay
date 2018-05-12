@@ -101,6 +101,7 @@ app.post('/save-stripe-token', (req, res) => {
     let parsed = JSON.parse(req.body)
     let boughtItems = parsed.cartItems //array of itemids being purchased
     let buyerID = parsed.email// so I can associate the purchase with the buyer
+    console.log(parsed)
     res.send(JSON.stringify(alibay.buy(buyerID, boughtItems)));
     //thanks to client for purchase
 });
