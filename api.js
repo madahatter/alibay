@@ -90,9 +90,9 @@ app.get('/itemsbySeller', (req, res) => {
     let sellerID = req.query.sellerID
     res.send(JSON.stringify(alibay.allItemsForSale(sellerID)));
 });
-app.post('/allItemBuyer', (req, res) => {
-    let parsed = (JSON.parse(req.body))
-    let parsedUserID = parsed.email //  will be retrieving items sold by the userdID in buyermap//********* */
+app.get('/allItemBuyer', (req, res) => {
+    let buyerID = req.query.buyerID
+    res.send(JSON.stringify(alibay.allItemsBought(buyerID)))
 
 });
 app.post('/save-stripe-token', (req, res) => {

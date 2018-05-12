@@ -108,7 +108,7 @@ allItemsBought returns the IDs of all the items bought by a buyer
     returns: an array of listing IDs
 */
 function allItemsBought(buyerID) {
-    return itemsBought[buyerID];
+    return itemBought[buyerID].map(itemID => listings[itemID])
 }
 
 function addItemImage(itemID, img) {
@@ -187,6 +187,7 @@ module.exports = {
     categories,
     getRandomListings,
     buy,
-    getCart
+    getCart,
+    allItemsBought
     // Add all the other functions that need to be exported
 }
