@@ -76,7 +76,7 @@ app.post('/addToCart', (req, res) => {
 app.get('/itemCart', (req, res) => {
     let sessionID = req.cookies.session
     let cartItems = sessionInfo[sessionID].cartItems
-    res.send(JSON.stringify(cartItems))
+    res.send(JSON.stringify(alibay.getCart(cartItems)))
 });
 
 app.post('/removeFromCart', (req, res) => {

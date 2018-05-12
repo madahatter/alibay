@@ -73,6 +73,10 @@ let addToCart = (itemID, sessionID) => {
     return itemID;
 }
 
+let getCart = (cartItems) => {
+    return cartItems.map((itemID)=> listings[itemID])
+}
+
 let getItemDetails = (itemID) => {
     return listings[itemID]
 
