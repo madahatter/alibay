@@ -187,5 +187,6 @@ module.exports = {
     categories,
     getRandomListings,
     buy,
+    getCart
     // Add all the other functions that need to be exported
 }
