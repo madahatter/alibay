@@ -153,9 +153,13 @@ function buy(buyerID, boughtItems) {
         itemsBought[buyerID] = boughtItems
     } else {
     itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)}
+    console.log(boughtItems)
+    boughtItems.map(item => delete listings[item])
+    fs.writeFileSync('db/listings.json', JSON.stringify(listings))
     fs.writeFileSync('db/itemsBought.json', JSON.stringify(itemsBought))
     return {success: true}
 }
+
 
 
 /* 
