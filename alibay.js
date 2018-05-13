@@ -153,16 +153,22 @@ function buy(buyerID, boughtItems) {
     if(!itemsBought[buyerID]){
         itemsBought[buyerID] = boughtItems
         purchaseHistory[buyerID] = boughtItems.map(item => listings[item])
+        purchaseHistory[buyerID].forEach(obj => {
+            itemsForSale[obj.sellerID]= itemsForSale[obj.sellerID].filter(itemID => !boughtItems.some(item=> item ===itemID))
+        })
         //boughtItems.map(item => delete listings[item])
     } else {
         itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)
         let tempArray = boughtItems.map(item => listings[item])
         purchaseHistory[buyerID] = purchaseHistory[buyerID].concat(tempArray)
+        purchaseHistory[buyerID].forEach(obj => {
+            itemsForSale[obj.sellerID]= itemsForSale[obj.sellerID].filter(itemID => !boughtItems.some(item=> item ===itemID))
+        })
         //boughtItems.map(item => delete listings[item])
 }
     console.log(boughtItems)
     boughtItems.map(item => delete listings[item])
-
+    fs.writeFileSync('db/itemsForSale.json', JSON.stringify(itemsForSale))
     fs.writeFileSync('db/purchaseHistory.json', JSON.stringify(purchaseHistory))
     fs.writeFileSync('db/listings.json', JSON.stringify(listings))
     fs.writeFileSync('db/itemsBought.json', JSON.stringify(itemsBought))

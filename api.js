@@ -84,7 +84,7 @@ app.post('/removeFromCart', (req, res) => {
     let parsed = JSON.parse(req.body.toString())
     let removeItemID = parsed.itemID
     sessionInfo[sessionID].cartItems = sessionInfo[sessionID].cartItems.filter(itemID => itemID !== removeItemID)
-    res.send(JSON.stringify(sessionInfo[sessionID].cartItems));
+    res.send(JSON.stringify({success: true}));
 });
 app.get('/itemsbySeller', (req, res) => {
     let sellerID = req.query.sellerID
