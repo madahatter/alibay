@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"a@a.com":[{"itemID":310010,"title":"123","sellerID":"a@a.com","blurb":"123","imageName":"c2e12.jpg","category":"Cars"}],"5@5.com":[{"itemID":138901,"title":"Phone","price":"200","sellerID":"5@5.com","blurb":"phone","imageName":"blhw8r.png","category":"Phones"},{"itemID":981615,"title":"Car","sellerID":"5@5.com","blurb":"super car","imageName":"8xf3kg.png","category":"Cars"}]}
+=======
+{"a@a.com":[{"itemID":514148,"title":"abc","sellerID":"a@a.com","blurb":"qwerty","imageName":"an22f.jpg","category":"Cars"}]}
+>>>>>>> 9f9a0df2e6141de184a674c1fe8659e34c008b15
