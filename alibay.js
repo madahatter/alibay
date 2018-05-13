@@ -184,7 +184,13 @@ allItemsForSale returns the IDs of all the items beingsold by a seller
 */
 
 let allItemsForSale = (sellerID) => {
+    console.log(itemsForSale[sellerID])
+    if(itemsForSale[sellerID].length > 0)  {
     return itemsForSale[sellerID].map(itemID => listings[itemID])
+    }
+    else {
+        return {success: false}
+    }
 }
 
 module.exports = {
