@@ -5,6 +5,7 @@ let itemsBought = JSON.parse(fs.readFileSync('db/itemsBought.json')) // map that
 let itemsForSale = JSON.parse(fs.readFileSync('db/itemsForSale.json'))
 let listings = JSON.parse(fs.readFileSync('db/listings.json'))
 let userMap = JSON.parse(fs.readFileSync('db/userMap.json'))
+let purchaseHistory = JSON.parse(fs.readFileSync('db/purchaseHistory.json'))
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
@@ -108,7 +109,7 @@ allItemsBought returns the IDs of all the items bought by a buyer
     returns: an array of listing IDs
 */
 function allItemsBought(buyerID) {
-    return itemsBought[buyerID].map(itemID => listings[itemID])
+    return purchaseHistory[buyerID]
 }
 
 function addItemImage(itemID, img) {
@@ -151,10 +152,18 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, boughtItems) {
     if(!itemsBought[buyerID]){
         itemsBought[buyerID] = boughtItems
+        purchaseHistory[buyerID] = boughtItems.map(item => listings[item])
+        //boughtItems.map(item => delete listings[item])
     } else {
-    itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)}
+        itemsBought[buyerID] = itemsBought[buyerID].concat(boughtItems)
+        let tempArray = boughtItems.map(item => listings[item])
+        purchaseHistory[buyerID] = purchaseHistory[buyerID].concat(tempArray)
+        //boughtItems.map(item => delete listings[item])
+}
     console.log(boughtItems)
     boughtItems.map(item => delete listings[item])
+
+    fs.writeFileSync('db/purchaseHistory.json', JSON.stringify(purchaseHistory))
     fs.writeFileSync('db/listings.json', JSON.stringify(listings))
     fs.writeFileSync('db/itemsBought.json', JSON.stringify(itemsBought))
     return {success: true}
